@@ -1,0 +1,17 @@
+.bt-principal {
+    background-color: var(--cor-principal);
+    border: none;
+}
+
+.bt-secundario {
+    background-color: var(--cor-alerta);
+    border: none;
+}
+
+.bt-circulado {
+    border: var(--borda); 
+}
+
+.borda-quadrada {
+    border-radius: 6px;
+}

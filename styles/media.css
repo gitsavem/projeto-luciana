@@ -1,0 +1,38 @@
+@media (max-width: 600px) {
+    header h1 {
+        display: none;
+    }
+
+    .menu-mobile {
+        display: block;
+    }
+
+    .links-cabecalho {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #0e1a22;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .links-cabecalho a {
+        padding: 15px;
+        display: block;
+    }
+
+    .links-cabecalho.ativo {
+        display: flex;
+    }
+
+    .menu-mobile {
+        display: block;
+    }
+
+    #area_busca {
+        display: none;
+    }
+}
