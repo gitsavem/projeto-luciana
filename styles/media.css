@@ -75,6 +75,8 @@
         width: 30%;
         position: relative;
         font-size: 0.8rem;
-        animation: paraCima 1.2s both 0.5s;
+    }
+    .topo > div:nth-child(1) {
+        position: relative;
     }
 }
