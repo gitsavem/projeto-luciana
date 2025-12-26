@@ -56,7 +56,7 @@
     #sec_um img {
         position: relative;
         display: block;
-        margin: auto;
+        margin: 10px auto;
         width: 16rem;
         height: 18rem;
         border-radius: 12px;
@@ -64,5 +64,17 @@
 
     #ac_um .container {
         flex-flow: column wrap;
+    }
+
+    .modal form {
+        width: 100%;
+        height: 100%;
+    }
+
+    .topo > div:nth-child(2) {
+        width: 30%;
+        position: relative;
+        font-size: 0.8rem;
+        animation: paraCima 1.2s both 0.5s;
     }
 }
