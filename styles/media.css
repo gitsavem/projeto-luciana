@@ -49,6 +49,19 @@
         margin: 0;
     }
 
+    #sec_dois ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #sec_um img {
+        position: static;
+        display: block;
+        margin: auto;
+        width: 16rem;
+        height: 18rem;
+        border-radius: 12px;
+    }
+
     #ac_um .container {
         flex-flow: column wrap;
     }
