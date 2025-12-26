@@ -1,7 +1,13 @@
+// ==============================
+// BASE PATH (index.html ou /pages)
+// ==============================
 const basePath = location.pathname.includes("/pages/")
     ? ".."
     : ".";
 
+// ==============================
+// CARREGAR SCRIPTS
+// ==============================
 const modalScript = document.createElement("script");
 modalScript.src = `${basePath}/src/modal.js`;
 document.head.appendChild(modalScript);
@@ -13,154 +19,177 @@ dadosScript.onload = () => {
 };
 document.head.appendChild(dadosScript);
 
-
-// localStorage.clear();
-
+// ==============================
+// FUNÇÃO PRINCIPAL
+// ==============================
 function carregarConteudo() {
-    carregarDados();
 
+    // ---- carregar dados do usuário
+    if (typeof carregarDados === "function") {
+        carregarDados();
+    }
+
+    // ---- ajustar ícones material symbols
     document.querySelectorAll(".msr").forEach(icon => {
         icon.classList.replace("msr", "material-symbols-rounded");
     });
 
-    let ativo = false;
-    
-    function checarDados(elementos = []) {
-        const possiveisFinais = ["@gmail.com", "@hotmail.com.br", "@outlook.com.br"];
+    // ==============================
+    // FUNÇÕES AUXILIARES
+    // ==============================
 
-        const emailValido = possiveisFinais.some(final =>
-            elementos[0].value.endsWith(final)
+    function checarDados(emailInput, senhaInput) {
+        const finaisValidos = ["@gmail.com", "@hotmail.com.br", "@outlook.com.br"];
+
+        const emailValido = finaisValidos.some(f =>
+            emailInput.value.endsWith(f)
         );
 
-        const senhaValida = elementos[1].value.length >= 4;
+        const senhaValida = senhaInput.value.length >= 4;
 
         return emailValido && senhaValida;
     }
 
-    const inputImagem = document.getElementById("imagem_perfil");
-    const cont = document.getElementById("imagem_container");
+    function salvarImagemPerfil() {
+        const inputImagem = document.getElementById("imagem_perfil");
+        const container = document.getElementById("imagem_container");
 
-    if (inputImagem) {
-        inputImagem.addEventListener("change", () => {
-            const labelImagem = cont.querySelector("label");
-            const file = inputImagem.files[0];
-            if (!file) return;
+        if (!inputImagem || !container) return;
 
-            const previewURL = URL.createObjectURL(file);
-            labelImagem.style.backgroundImage = `url(${previewURL})`;
-            labelImagem.style.backgroundSize = "cover";
-            labelImagem.style.backgroundPosition = "center";
+        const label = container.querySelector("label");
+        const file = inputImagem.files[0];
+        if (!file) return;
 
-            const reader = new FileReader();
+        const previewURL = URL.createObjectURL(file);
 
-            reader.onload = () => {
-                dados_usuario.imagem = reader.result;
-                localStorage.setItem("dadosSalvo", JSON.stringify(dados_usuario));
+        label.style.backgroundImage = `url(${previewURL})`;
+        label.style.backgroundSize = "cover";
+        label.style.backgroundPosition = "center";
 
-                URL.revokeObjectURL(previewURL);
-            };
+        const reader = new FileReader();
+        reader.onload = () => {
+            dados_usuario.imagem = reader.result;
+            localStorage.setItem("dadosSalvo", JSON.stringify(dados_usuario));
+            URL.revokeObjectURL(previewURL);
+        };
 
-            reader.readAsDataURL(file);
-        });
-    }  
+        reader.readAsDataURL(file);
+    }
 
+    function salvarRegistro() {
+        const nome = document.getElementById("nome_usuario");
+        const email = document.getElementById("email_usuario");
+        const senha = document.getElementById("senha_usuario");
+
+        if (!nome || !email || !senha) return;
+
+        if (checarDados(email, senha)) {
+            dados_usuario.nome = nome.value;
+            dados_usuario.email = email.value;
+            dados_usuario.senha = senha.value;
+
+            localStorage.setItem("dadosSalvo", JSON.stringify(dados_usuario));
+
+            defModal({ type: null });
+            carregarDados();
+        } else {
+            alert("Dados inválidos");
+        }
+    }
+
+    // ==============================
+    // EVENT LISTENER ÚNICO
+    // ==============================
     document.addEventListener("click", (e) => {
-        const iconeBusca = e.target.closest("#icone_busca");
-        const iconeMais = e.target.closest(".icone-mais");
-        const registrar = e.target.closest(".registrar");
-        const fecharModal = e.target.closest(".fechar");
-        const salvar = e.target.closest(".salvar");
-        const cancelar = e.target.closest(".cancelar");
-        const iconePerfil = e.target.closest(".icone-perfil");
-        const agendamento = e.target.closest(".agendamento");
 
-        const botaoMenu = document.querySelector(".menu-mobile");
+        // ---- MENU MOBILE
+        const botaoMenu = e.target.closest(".menu-mobile");
         const menu = document.querySelector(".menu-mobile-container");
 
-        if (botaoMenu) {
+        if (botaoMenu && menu) {
             menu.classList.toggle("ativo");
-
             botaoMenu.textContent = menu.classList.contains("ativo")
                 ? "left_panel_close"
                 : "right_panel_close";
-        };
+            return;
+        }
 
-        if (menu) {
-            if (e.target === menu) {
-                menu.classList.remove("ativo");
-                botaoMenu.textContent = "menu";
-            }
-        };
+        if (menu && e.target === menu) {
+            menu.classList.remove("ativo");
+            document.querySelector(".menu-mobile").textContent = "right_panel_close";
+            return;
+        }
 
+        // ---- BUSCA
+        const iconeBusca = e.target.closest("#icone_busca");
+        if (iconeBusca) {
+            document.getElementById("caixa_busca")?.classList.toggle("ativo");
+            return;
+        }
+
+        // ---- REGISTRAR
+        const registrar = e.target.closest(".registrar");
+        if (registrar) {
+            defModal({ type: "registro" });
+            return;
+        }
+
+        // ---- FECHAR / CANCELAR MODAL
+        const fechar = e.target.closest(".fechar, .cancelar");
+        if (fechar) {
+            defModal({ type: null });
+            return;
+        }
+
+        // ---- SALVAR REGISTRO
+        const salvar = e.target.closest(".salvar");
+        if (salvar) {
+            e.preventDefault();
+            salvarRegistro();
+            return;
+        }
+
+        // ---- PERFIL
+        const iconePerfil = e.target.closest(".icone-perfil");
+        if (iconePerfil) {
+            window.location.href = `${basePath}/pages/perfil.html`;
+            return;
+        }
+
+        // ---- AGENDAMENTO
+        const agendamento = e.target.closest(".agendamento");
         if (agendamento) {
             if (Object.keys(dados_usuario).length === 0) {
                 defModal({ type: "registro" });
             } else {
-                alert("Certo")
+                alert("Agendamento confirmado!");
             }
+            return;
         }
 
-        if (iconePerfil) {
-            e.preventDefault();
-
-            const basePath = location.pathname.includes("/pages/")
-                ? ".."
-                : ".";
-
-            window.location.href = `${basePath}/perfil.html`;
-        }
-
-
-        if (salvar) {
-            e.preventDefault();
-
-            const nomeSalvo = document.getElementById("nome_usuario");
-            const emailSalvo = document.getElementById("email_usuario");
-            const senhaSalva = document.getElementById("senha_usuario");
-
-            const valido = checarDados([emailSalvo, senhaSalva]);
-            if (valido) {
-                dados_usuario.nome = nomeSalvo.value;
-                dados_usuario.email = emailSalvo.value;
-                dados_usuario.senha = senhaSalva.value;
-
-                localStorage.setItem("dadosSalvo", JSON.stringify(dados_usuario));
-
-                defModal({ type: null });
-                carregarDados();
-            } else {
-                alert("Dados inválidos");
-            }
-
-        }
-
-        if (fecharModal || cancelar) {
-            defModal({ type: null });
-        }
-
-        if (registrar) {
-            defModal({ type: "registro" });
-        }
-
-        if (iconeBusca) {
-            const caixa = document.getElementById("caixa_busca");
-            if (!caixa) return;
-
-            caixa.classList.toggle("ativo");
-        }
-
+        // ---- ABRIR / FECHAR TEXTO
+        const iconeMais = e.target.closest(".icone-mais");
         if (iconeMais) {
-            const caixaPai = iconeMais.closest("article");
+            const artigo = iconeMais.closest("article");
+            const texto = artigo?.querySelector("p");
             const span = iconeMais.querySelector("span");
-            const p = caixaPai.querySelector("p");
-            
-            if (p.style.display === "none") {
-                p.style.display = "block";
-                span.textContent = "keyboard_arrow_up";
-            } else {
-                p.style.display = "none";
-                span.textContent = "keyboard_arrow_down";
-            } 
+
+            if (texto) {
+                const aberto = texto.style.display !== "none";
+                texto.style.display = aberto ? "none" : "block";
+                span.textContent = aberto
+                    ? "keyboard_arrow_down"
+                    : "keyboard_arrow_up";
+            }
+            return;
         }
     });
+
+    // ==============================
+    // EVENTOS ESPECÍFICOS
+    // ==============================
+    const inputImagem = document.getElementById("imagem_perfil");
+    if (inputImagem) {
+        inputImagem.addEventListener("change", salvarImagemPerfil);
+    }
 }

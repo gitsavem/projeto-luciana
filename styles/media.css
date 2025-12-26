@@ -3,8 +3,12 @@
         display: none;
     }
 
+    .desktop-only {
+        display: none;
+    }
+
     .menu-mobile {
-        display: block;
+        display: inline-block;
     }
 
     .links-cabecalho {

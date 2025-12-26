@@ -4,36 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psicologia com Luciana</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <header>
-        <span class="msr menu-mobile">right_panel_close</span>
+        <!-- Ícone menu mobile -->
+        <span class="msr menu-mobile">menu</span>
+
         <h1>Psicologia com Luciana</h1>
-        <div id="area_busca" class="container">
+
+        <div id="area_busca" class="container desktop-only">
             <input type="text" id="caixa_busca" placeholder="Pesquise algum tema...">
             <span class="msr" id="icone_busca">search</span>
         </div>
-        <div class="links-cabecalho">
-            <a href="auxilio.html">Auxílio</a>
-            <a href="teste.html">Testes</a>
+
+        <div class="links-cabecalho desktop-only">
+            <a href="pages/auxilio.html">Auxílio</a>
+            <a href="pages/teste.html">Testes</a>
         </div>
+
         <button class="bt-principal registrar">Registrar-se</button>
     </header>
     <nav class="menu-mobile-container">
         <div class="menu-conteudo">
 
-            <!-- Busca -->
             <div class="area-busca-mobile">
                 <input type="text" placeholder="Pesquise algum tema...">
                 <span class="material-symbols-rounded">search</span>
             </div>
 
-            <!-- Links -->
             <a href="pages/auxilio.html">Auxílio</a>
             <a href="pages/teste.html">Testes</a>
-
         </div>
     </nav>
     <main>
