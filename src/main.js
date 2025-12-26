@@ -1,13 +1,18 @@
+const basePath = location.pathname.includes("/pages/")
+    ? ".."
+    : ".";
+
 const modalScript = document.createElement("script");
-modalScript.src = "../src/modal.js";
+modalScript.src = `${basePath}/src/modal.js`;
 document.head.appendChild(modalScript);
 
 const dadosScript = document.createElement("script");
-dadosScript.src = "../src/dados.js";
+dadosScript.src = `${basePath}/src/dados.js`;
 dadosScript.onload = () => {
     carregarConteudo();
 };
 document.head.appendChild(dadosScript);
+
 
 // localStorage.clear();
 
@@ -97,8 +102,14 @@ function carregarConteudo() {
 
         if (iconePerfil) {
             e.preventDefault();
-            window.location.href = "perfil.html";
+
+            const basePath = location.pathname.includes("/pages/")
+                ? ".."
+                : ".";
+
+            window.location.href = `${basePath}/perfil.html`;
         }
+
 
         if (salvar) {
             e.preventDefault();
