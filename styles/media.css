@@ -1,4 +1,8 @@
 @media (max-width: 600px) {
+    * {
+        font-size: 8pt;
+    }
+
     header h1 {
         display: none;
     }
@@ -38,5 +42,13 @@
 
     #area_busca {
         display: none;
+    }
+
+    #sec_dois p, #ac_zero p {
+        width: 100%;
+    }
+
+    #ac_um .container {
+        flex-flow: column wrap;
     }
 }
