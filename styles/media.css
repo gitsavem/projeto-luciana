@@ -54,7 +54,7 @@
     }
 
     #sec_um img {
-        position: static;
+        position: relative;
         display: block;
         margin: auto;
         width: 16rem;
